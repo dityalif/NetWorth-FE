@@ -19,8 +19,24 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
 
+  // Regex untuk validasi email dan password
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passRegex = /^(?=.*\d)(?=.*[\W_]).{8,}$/;
+
   // Fungsi untuk menangani register
   const handleRegister = async () => {
+    if (!emailRegex.test(email)) {
+      alert("Invalid email format! Please enter a valid email.");
+      return;
+    }
+
+    if (!passRegex.test(password)) {
+      alert(
+        "Invalid password! Password must be at least 8 characters long, contain at least one digit, and one special character."
+      );
+      return;
+    }
+
     if (password !== confirm) {
       alert("Passwords do not match!");
       return;
@@ -29,7 +45,9 @@ export default function RegisterPage() {
     try {
       console.log("Sending request to backend...");
       const response = await axios.post(
-        `/user/register?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
+        `/user/register?name=${encodeURIComponent(name)}&email=${encodeURIComponent(
+          email
+        )}&password=${encodeURIComponent(password)}`
       );
       console.log("Response received:", response);
 
